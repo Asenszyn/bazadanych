@@ -1,7 +1,7 @@
 import sqlite3
 
 # Utworzenie połączenia z bazą danych
-conn = sqlite3.connect('baza_danych.db')
+conn = sqlite3.connect('database.db')
 c = conn.cursor()
 
 # Utworzenie tabel
