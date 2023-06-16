@@ -6,7 +6,7 @@ import csv
 def dodaj_rekord():
     conn = sqlite3.connect('baza_danych.db')
     c = conn.cursor()
-    c.execute("INSERT INTO tabela1 (kolumna1, kolumna2) VALUES (?, ?)", (pole1.get(), pole2.get()))
+    c.execute("INSERT INTO tabela1 (nazwa, cena) VALUES (?, ?)", (pole1.get(), pole2.get()))
     conn.commit()
     conn.close()
 
@@ -22,7 +22,7 @@ def usun_rekord():
 def edytuj_rekord():
     conn = sqlite3.connect('baza_danych.db')
     c = conn.cursor()
-    c.execute("UPDATE tabela1 SET kolumna1=?, kolumna2=? WHERE id=?", (pole1.get(), pole2.get(), pole_id.get()))
+    c.execute("UPDATE tabela1 SET nazwa=?, cena=? WHERE id=?", (pole1.get(), pole2.get(), pole_id.get()))
     conn.commit()
     conn.close()
 
@@ -50,7 +50,7 @@ def wyszukaj_rekordy():
 def sortuj_rekordy():
     conn = sqlite3.connect('baza_danych.db')
     c = conn.cursor()
-    c.execute("SELECT * FROM tabela1 ORDER BY kolumna1")
+    c.execute("SELECT * FROM tabela1 ORDER BY nazwa")
     rekordy = c.fetchall()
     for rekord in rekordy:
         print(rekord)
@@ -60,7 +60,7 @@ def sortuj_rekordy():
 def filtrowanie_rekordy():
     conn = sqlite3.connect('baza_danych.db')
     c = conn.cursor()
-    c.execute("SELECT * FROM tabela1 WHERE kolumna1 LIKE ?", (f"%{pole1.get()}%",))
+    c.execute("SELECT * FROM tabela1 WHERE nazwa LIKE ?", (f"%{pole1.get()}%",))
     rekordy = c.fetchall()
     for rekord in rekordy:
         print(rekord)
@@ -74,7 +74,7 @@ def eksportuj_do_csv():
     rekordy = c.fetchall()
     with open('eksport.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(['kolumna1', 'kolumna2'])
+        writer.writerow(['nazwa', 'cena'])
         writer.writerows(rekordy)
     conn.close()
 
@@ -85,7 +85,7 @@ def importuj_z_csv():
     with open('import.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
-            c.execute("INSERT INTO tabela1 (kolumna1, kolumna2) VALUES (?, ?)", (row[0], row[1]))
+            c.execute("INSERT INTO tabela1 (nazwa, cena) VALUES (?, ?)", (row[0], row[1]))
     conn.commit()
     conn.close()
 
@@ -139,26 +139,26 @@ def utworz_tabele():
     # Tabela 1
     c.execute('''CREATE TABLE IF NOT EXISTS tabela1
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 kolumna1 TEXT,
-                 kolumna2 TEXT)''')
+                 nazwa TEXT,
+                 cena TEXT)''')
 
     # Tabela 2
     c.execute('''CREATE TABLE IF NOT EXISTS tabela2
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 kolumna1 TEXT,
-                 kolumna2 TEXT)''')
+                 marka TEXT,
+                 ilosc TEXT)''')
 
     # Tabela 3
     c.execute('''CREATE TABLE IF NOT EXISTS tabela3
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 kolumna1 TEXT,
-                 kolumna2 TEXT)''')
+                 kategoria TEXT,
+                 opis TEXT)''')
 
     # Tabela 4
     c.execute('''CREATE TABLE IF NOT EXISTS tabela4
                  (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 kolumna1 TEXT,
-                 kolumna2 TEXT)''')
+                 producent TEXT,
+                 rok TEXT)''')
 
     conn.commit()
     conn.close()
@@ -195,28 +195,28 @@ def sortuj_rekordy_kategoria():
     c = conn.cursor()
 
     # Tabela 1
-    c.execute("SELECT * FROM tabela1 ORDER BY kolumna2")
+    c.execute("SELECT * FROM tabela1 ORDER BY cena")
     rekordy_tabela1 = c.fetchall()
     print("Tabela 1 - Posortowana według kategorii:")
     for rekord in rekordy_tabela1:
         print(rekord)
 
     # Tabela 2
-    c.execute("SELECT * FROM tabela2 ORDER BY kolumna2")
+    c.execute("SELECT * FROM tabela2 ORDER BY ilosc")
     rekordy_tabela2 = c.fetchall()
     print("Tabela 2 - Posortowana według kategorii:")
     for rekord in rekordy_tabela2:
         print(rekord)
 
     # Tabela 3
-    c.execute("SELECT * FROM tabela3 ORDER BY kolumna2")
+    c.execute("SELECT * FROM tabela3 ORDER BY opis")
     rekordy_tabela3 = c.fetchall()
     print("Tabela 3 - Posortowana według kategorii:")
     for rekord in rekordy_tabela3:
         print(rekord)
 
     # Tabela 4
-    c.execute("SELECT * FROM tabela4 ORDER BY kolumna2")
+    c.execute("SELECT * FROM tabela4 ORDER BY rok")
     rekordy_tabela4 = c.fetchall()
     print("Tabela 4 - Posortowana według kategorii:")
     for rekord in rekordy_tabela4:
